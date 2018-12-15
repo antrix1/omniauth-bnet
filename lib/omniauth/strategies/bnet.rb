@@ -10,7 +10,7 @@ module OmniAuth
 
       def client(region)
         opts = options.client_options
-        hostname = get_host(region)
+        hostname = host_for(region)
 
         options.client_options[:authorize_url] = "https://#{hostname}/oauth/authorize" unless opts.has_key(:authorize_url)
         options.client_options[:token_url] = "https://#{hostname}/oauth/token" unless opts.has_key(:token_url)
@@ -20,8 +20,7 @@ module OmniAuth
       end
 
       def request_phase
-        byebug
-        super
+        redirect client(request.params['region']).auth_code.authorize_url({ redirect_uri: callback_url }.merge(authorize_params))
       end
 
       def authorize_params
@@ -54,7 +53,7 @@ module OmniAuth
         full_host + script_name + callback_path
       end
 
-      def get_host(region)
+      def host_for(region)
         region == 'cn' ? 'www.battlenet.com.cn' : '#{region}.battle.net'
       end
     end
