@@ -3,7 +3,7 @@ require 'base64'
 
 module OmniAuth
   module Strategies
-    class BattleNet < OmniAuth::Strategies::OAuth2
+    class Bnet < OmniAuth::Strategies::OAuth2
       option :client_options, {
         :scope => 'wow.profile'
       }
