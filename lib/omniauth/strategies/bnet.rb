@@ -13,14 +13,11 @@ module OmniAuth
 
       def client
         opts = options.client_options
-        hostname = host_for(region)
-        puts "HOSTNAME IS #{hostname}"
 
         options.client_options[:authorize_url] = "https://#{hostname}/oauth/authorize"
         options.client_options[:token_url] = "https://#{hostname}/oauth/token"
         options.client_options[:site] = "https://#{hostname}/"
 
-        byebug
         super
       end
 
@@ -54,7 +51,7 @@ module OmniAuth
       end
 
       def callback_phase
-        byebug
+        @region = request.env['omniauth.params']['region']
         super
       end
 
@@ -64,7 +61,7 @@ module OmniAuth
         full_host + script_name + callback_path
       end
 
-      def host_for(region)
+      def hostname
         region == 'cn' ? 'www.battlenet.com.cn' : "#{region}.battle.net"
       end
     end
