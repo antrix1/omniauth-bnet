@@ -5,25 +5,28 @@ require 'base64'
 module OmniAuth
   module Strategies
     class Bnet < OmniAuth::Strategies::OAuth2
+      attr_accessor :region
+
       option :client_options, {
         :scope => 'wow.profile'
       }
 
-      def client(region = 'eu')
+      def client
         opts = options.client_options
         hostname = host_for(region)
+        puts "HOSTNAME IS #{hostname}"
 
         options.client_options[:authorize_url] = "https://#{hostname}/oauth/authorize"
         options.client_options[:token_url] = "https://#{hostname}/oauth/token"
         options.client_options[:site] = "https://#{hostname}/"
 
         byebug
-        # super
-        # ::OAuth2::Client.new(options.client_id, options.client_secret, deep_symbolize(options.client_options))
+        super
       end
 
       def request_phase
-        redirect client(request.params['region']).auth_code.authorize_url({ redirect_uri: callback_url }.merge(authorize_params))
+        @region = request.params['region']
+        super
       end
 
       def authorize_params
