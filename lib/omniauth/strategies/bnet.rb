@@ -9,7 +9,7 @@ module OmniAuth
         :scope => 'wow.profile'
       }
 
-      def localized_client(region)
+      def client(region = 'eu')
         opts = options.client_options
         hostname = host_for(region)
 
@@ -18,11 +18,12 @@ module OmniAuth
         options.client_options[:site] = "https://#{hostname}/"
 
         byebug
-        ::OAuth2::Client.new(options.client_id, options.client_secret, deep_symbolize(options.client_options))
+        # super
+        # ::OAuth2::Client.new(options.client_id, options.client_secret, deep_symbolize(options.client_options))
       end
 
       def request_phase
-        redirect localized_client(request.params['region']).auth_code.authorize_url({ redirect_uri: callback_url }.merge(authorize_params))
+        redirect client(request.params['region']).auth_code.authorize_url({ redirect_uri: callback_url }.merge(authorize_params))
       end
 
       def authorize_params
