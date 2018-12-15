@@ -1,4 +1,5 @@
 require 'omniauth-oauth2'
+require 'oauth2'
 require 'base64'
 
 module OmniAuth
@@ -12,11 +13,12 @@ module OmniAuth
         opts = options.client_options
         hostname = host_for(region)
 
-        options.client_options[:authorize_url] = "https://#{hostname}/oauth/authorize" unless opts.has_key(:authorize_url)
-        options.client_options[:token_url] = "https://#{hostname}/oauth/token" unless opts.has_key(:token_url)
-        options.client_options[:site] = "https://#{hostname}/" unless opts.has_key(:site)
+        options.client_options[:authorize_url] = "https://#{hostname}/oauth/authorize"
+        options.client_options[:token_url] = "https://#{hostname}/oauth/token"
+        options.client_options[:site] = "https://#{hostname}/"
 
-        client
+        byebug
+        ::OAuth2::Client.new(options.client_id, options.client_secret, deep_symbolize(options.client_options))
       end
 
       def request_phase
