@@ -53,6 +53,11 @@ module OmniAuth
         @raw_info = access_token.get('oauth/userinfo').parsed
       end
 
+      def callback_phase
+        byebug
+        super
+      end
+
       private
 
       def callback_url
