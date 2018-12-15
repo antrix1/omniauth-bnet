@@ -8,7 +8,7 @@ module OmniAuth
         :scope => 'wow.profile'
       }
 
-      def client(region)
+      def localized_client(region)
         opts = options.client_options
         hostname = host_for(region)
 
@@ -16,11 +16,11 @@ module OmniAuth
         options.client_options[:token_url] = "https://#{hostname}/oauth/token" unless opts.has_key(:token_url)
         options.client_options[:site] = "https://#{hostname}/" unless opts.has_key(:site)
 
-        super
+        client
       end
 
       def request_phase
-        redirect client(request.params['region']).auth_code.authorize_url({ redirect_uri: callback_url }.merge(authorize_params))
+        redirect localized_client(request.params['region']).auth_code.authorize_url({ redirect_uri: callback_url }.merge(authorize_params))
       end
 
       def authorize_params
@@ -54,7 +54,7 @@ module OmniAuth
       end
 
       def host_for(region)
-        region == 'cn' ? 'www.battlenet.com.cn' : '#{region}.battle.net'
+        region == 'cn' ? 'www.battlenet.com.cn' : "#{region}.battle.net"
       end
     end
   end
