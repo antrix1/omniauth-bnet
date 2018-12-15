@@ -14,7 +14,7 @@ module OmniAuth
 
         options.client_options[:authorize_url] = "https://#{hostname}/oauth/authorize" unless opts.has_key(:authorize_url)
         options.client_options[:token_url] = "https://#{hostname}/oauth/token" unless opts.has_key(:token_url)
-        options.client_options[:site] = "https://#{hostname}/" unless opt.has_key(:site)
+        options.client_options[:site] = "https://#{hostname}/" unless opts.has_key(:site)
 
         super
       end
